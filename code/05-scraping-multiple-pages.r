@@ -7,7 +7,6 @@
 source("packages.r")
 
 
-
 ## dealing with multiple pages ----------
 
 # often, we want to scrape data from multiple pages

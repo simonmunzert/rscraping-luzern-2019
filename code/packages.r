@@ -17,7 +17,9 @@ p_needed <- c("rvest", # scraping suite
               "networkD3", # tools to process network data
               "ggplot2", # for graphics
               "tidyr", # for tidying data frames
-              "reshape2" # reshape data 
+              "reshape2", # reshape data 
+              "sf", "rgeos", "rnaturalearth", "rnaturalearthdata" # geodata
+              
 )
 packages <- rownames(installed.packages())
 p_to_install <- p_needed[!(p_needed %in% packages)]

@@ -173,16 +173,24 @@ stri_rand_strings(100, 10, pattern = "[washington]")
 ## EXERCISES ----------
 
 ## 1. describe the types of strings that conform to the following regular expressions and construct an example that is matched by the regular expression.
+
+"\\b[a-z]{1,4}\\b"
+".*?\\.txt$"
+"\\d{2}/\\d{2}/\\d{2,4}"
+"<(.+?)>.+?</\\1>"
+
 str_extract_all("Phone 150$, PC 690$", "[0-9]+\\$") # example
-str_extract_all("The smallest cities are the best", "\\b[a-z]{1,4}\\b")
-str_extract_all(c("course.txt", "log.txt", "log..txt"), ".*?\\.txt$")
-str_extract_all("12/01/2019 to 12/01/19", "\\d{2}/\\d{2}/\\d{2,4}")
-str_extract_all("<li>hello</li>","<(.+?)>.+?</\\1>")
+
 
 ## 2. consider the mail address  chunkylover53[at]aol[dot]com.
 # a) transform the string to a standard mail format using regular expressions.
 # b) imagine we are trying to extract the digits in the mail address using [:digit:]. explain why this fails and correct the expression.
 email <- "chunkylover53[at]aol[dot]com"
+
+
+## 3. The following code hides a secret message. Crack it with R and regular expressions. Once you have cracked it, try to collapse the solution in one single string.
+
+secret <- "clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0TanwoUwisdij7Lj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigOd6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.RqoE65fGEa1otfb7wXm24k.6t3sH9zqe5fy89n6Ed5t9kc4fR905gmc4Ogxo5nhk!gr"
 
 
 

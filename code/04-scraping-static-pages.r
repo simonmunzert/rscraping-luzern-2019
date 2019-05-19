@@ -14,7 +14,7 @@ source("packages.r")
 # provides very intuitive functions to import and process webpages
 
 # 1. specify URL
-url <- "https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_Germany"
+url <- "https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_Switzerland"
 browseURL(url)
 
 # 2. download static HTML behind the URL and parse it
@@ -25,10 +25,7 @@ nodes <- html_nodes(url_parsed, xpath = '//td[2]')
 
 # 4. extract content from nodes
 article_links <- html_text(nodes)
-article_links[article_links != ""]
-
-head(article_links)
-length(article_links)
+article_links %>% str_replace("\\n", "")
 
 
 
@@ -39,6 +36,13 @@ length(article_links)
   # ... come with standard tags and are usually easily identifiable
 
 ## scraping HTML tables with rvest
+url <- "https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_Switzerland"
+url_parsed <- read_html(url)
+tables <- html_table(url_parsed, header = TRUE, fill = TRUE)
+tab <- tables[[1]]
+head(tab)
+
+## another example
 url_p <- read_html("https://en.wikipedia.org/wiki/List_of_MPs_elected_in_the_United_Kingdom_general_election,_1992")
 tables <- html_table(url_p, header = TRUE, fill = TRUE)
 mps <- tables[[4]]
@@ -80,8 +84,6 @@ headings <- html_text(headings_nodes)
 headings <- str_subset(headings, "^[:alnum:]")
 head(headings)
 length(headings)
-
-
 
 
 
