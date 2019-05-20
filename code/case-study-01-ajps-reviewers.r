@@ -28,7 +28,7 @@ library(nominatim)
 
 ## directory ---------------------
 
-wd <- ("data/ajpsReviewers")
+wd <- ("../data/ajpsReviewers")
 dir.create(wd)
 setwd(wd)
 
@@ -71,7 +71,7 @@ rev_raw[1]
 ## step 4: tidy data
 rev_all <- rev_raw %>% str_split("\\n") %>% unlist 
 surname <- str_extract(rev_all, "[[:alpha:]-]+")
-prename <- str_extract(rev_all, " [.[:alpha:]]+")
+prename <- str_extract(rev_all, " [[:alpha:].]+")
 rev_df <- data.frame(raw = rev_all, surname = surname, prename = prename, stringsAsFactors = F)
 rev_df$institution <- NA
 for(i in 1:nrow(rev_df)) {
@@ -89,7 +89,7 @@ unique_institutions <- unique(rev_df$institution)
 unique_institutions <- unique_institutions[!is.na(unique_institutions)]
 
 # get free key for mapquest API at browseURL("https://developer.mapquest.com/")
-load("/Users/s.munzert/rkeys.RDa") # import API key (or paste it here in openstreetmap object)
+load("/Users/simonmunzert/rkeys.RDa") # import API key (or paste it here in openstreetmap object)
 
 pos <- data.frame(lon = NA, lat = NA)
 if (!file.exists("institutions2015_geo.RData")){

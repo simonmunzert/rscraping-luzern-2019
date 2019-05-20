@@ -137,8 +137,6 @@ str(elements[!succeeded])
 
 
 
-
-
 ## Scheduling scraping tasks on Windows -------
 
 browseURL("https://cran.r-project.org/web/packages/taskscheduleR/vignettes/taskscheduleR.html")

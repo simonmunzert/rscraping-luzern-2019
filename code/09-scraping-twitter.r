@@ -10,19 +10,27 @@ source("packages.r")
 
 ## about the Twitter APIs
 
-  # two APIs types of interest:
-  # REST APIs --> reading/writing/following/etc., "Twitter remote control"
+# REST API --> reading/writing/following/etc., "Twitter remote control"
 browseURL("https://dev.twitter.com/rest/public/search")
-  # "The Twitter Search API searches against a sampling of recent Tweets published in the past 7 days."
-  # Streaming APIs --> low latency access to 1% of global stream - public, user and site streams
-browseURL("https://dev.twitter.com/streaming/overview")
-browseURL("https://dev.twitter.com/streaming/overview/request-parameters")
+
+# Search API(s) --> filter/collect historical tweets
+browseURL("https://developer.twitter.com/en/docs/tweets/search/overview")
+browseURL("https://developer.twitter.com/en/pricing.html")
+
+# Streaming (filter) API --> low latency access to 1% of global live stream by:
+  # 1. Sampling a small random sample of all publicly available tweets
+  # 2. Filtering via a search-like query (up to 400 keywords)
+  # 3. Tracking via vector of user ids (up to 5000 user_ids)
+  # 4. Location via geo coordinates (1-360 degree location boxes)
+
+browse("https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter")
+browseURL("https://developer.twitter.com/en/docs/tutorials/consuming-streaming-data")
 
 ## R packages that connect to Twitter API
 
   # twitteR: connects to REST API; weird design decisions regarding data format
   # streamR: connects to Streaming API; works very reliably, connection setup a bit difficult
-  # rtweet: connects to both REST and Streaming API, nice data formats, still under active development
+  # rtweet: connects to  REST, Search and Streaming API, nice data formats <-- pick that one!
 
 
 ## authentication with rtweet ----------------

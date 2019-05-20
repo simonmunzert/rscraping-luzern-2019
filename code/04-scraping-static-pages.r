@@ -21,7 +21,7 @@ browseURL(url)
 url_parsed <- read_html(url)
 
 # 3. extract specific nodes with XPath
-nodes <- html_nodes(url_parsed, xpath = '//td[2]')
+nodes <- html_nodes(url_parsed, xpath = '//table[1]//td[2]')
 
 # 4. extract content from nodes
 article_links <- html_text(nodes)
@@ -70,9 +70,18 @@ browseURL("http://selectorgadget.com/")
 
 url <- "https://www.washingtonpost.com"
 url <- "http://www.spiegel.de/schlagzeilen/"
+url <- "https://www.nzz.ch/"
 browseURL(url)
 
 url_parsed <- read_html(url)
+
+xpath <- '//*[contains(concat( " ", @class, " " ), concat( " ", "teaser__title-name", " " ))]'
+xpath <- '//*[@class="teaser__title-name"]'
+xpath <- '//*[contains(@class, "teaser__title-name"]'
+
+
+headings_nodes <- html_nodes(url_parsed, xpath = xpath) %>% html_text()
+
 
 xpath <- '//*[contains(concat( " ", @class, " " ), concat( " ", "text-align-inherit", " " ))]'
 xpath <- '//*[contains(concat( " ", @class, " " ), concat( " ", "schlagzeilen-headline", " " ))]'

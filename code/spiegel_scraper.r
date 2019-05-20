@@ -2,7 +2,7 @@
 library(stringr)
 library(magrittr)
 library(httr)
-setwd("/Users/simonmunzert/GitHub/rscraping-mpi-cologne-2019")
+setwd("/Users/simonmunzert/GitHub/rscraping-luzern-2019")
 url <- "http://www.spiegel.de/schlagzeilen/"
 url_out <- GET(url, add_headers(from = "eddie@datacollection.com"))
 datetime <- str_replace_all(Sys.time(), "[ :]", "-")

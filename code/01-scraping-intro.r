@@ -60,11 +60,13 @@ cities <- cities[6:length(cities)]
 length(cities)
 length(unique(cities))
 sort(table(cities))
-
+unique_cities <- unique(cities)
 
 ## step 2: geocode cities
 # get free key for mapquest API at browseURL("https://developer.mapquest.com/")
 load("/Users/simonmunzert/rkeys.RDa") # import API key (or paste it here in openstreetmap object)
+
+nominatim::osm_search("Cologne", country_codes = "de", key = openstreetmap)
 
 pos <- data.frame(lon = NA, lat = NA)
 if (!file.exists("geocodes_cities.RData")){

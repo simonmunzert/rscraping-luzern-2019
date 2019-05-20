@@ -15,6 +15,8 @@ browseURL("https://github.com/ropensci/opendata")
 browseURL("https://cran.r-project.org/web/views/WebTechnologies.html")
 
 
+## some examples ---------
+
 ## example: IP API
 
 # API documentation
@@ -29,31 +31,26 @@ ip_df <- geolocate(c(NA, "", "10.0.1.1", "72.33.67.89", "www.nytimes.com", "sear
 View(ip_df)
 
 
+## example: Wikipedia REST API
 
-## example: NY Times API
+# documentation
+browseURL("https://wikimedia.org/api/rest_v1/#/Pageviews%20data")
 
-# overview
-browseURL("https://cran.r-project.org/web/packages/rtimes/vignettes/rtimes_vignette.html")
-browseURL("http://developer.nytimes.com/article_search_v2.json#/README")
+## the pageviews package
 
-# register for key at
-browseURL("http://developer.nytimes.com/")
+# functionality
+ls("package:pageviews")
 
-# use API
-library(rtimes)
-load("/Users/simonmunzert/Munzert Dropbox/Simon Munzert/rkeys.RDa")
-Sys.setenv(NYTIMES_AS_KEY = nytimes_apikey)
+# get pageviews
+trump_views <- article_pageviews(project = "en.wikipedia", article = "Donald Trump", user_type = "user", start = "2015070100", end = "2017050100")
+head(trump_views)
+clinton_views <- article_pageviews(project = "en.wikipedia", article = "Hillary Clinton", user_type = "user", start = "2015070100", end = "2017050100")
 
-terms <- c("John McCain", "Nancy Pelosi", "Bernie Sanders", "Al Franken", "Marco Rubio", "Paul Ryan", "Elizabeth Warren", "Mitch McConnell", "Tim Kaine", "Dianne Feinstein")
+plot(ymd(trump_views$date), trump_views$views, col = "red", type = "l")
+lines(ymd(clinton_views$date), clinton_views$views, col = "blue")
 
-
-nytimes_hits <- numeric()
-for(i in seq_along(terms)) {
-  nytimes_hits[i] <-  as_search(q = terms[i], begin_date = "20180101", end_date = '20180930')$meta$hits
-  Sys.sleep(runif(1, 1, 2))
-}
-nytimes_hits_df <- data.frame(name = terms, nytimes_hits, stringsAsFactors = FALSE)
-head(nytimes_hits_df)
+# interactive tool available at
+browseURL("https://tools.wmflabs.org/pageviews/")
 
 
 
@@ -79,10 +76,10 @@ browseURL("http://ip-api.com/docs/")
 # manual API call, XML data
 url <- "http://ip-api.com/xml/"
 ip_parsed <- xml2::read_xml(url)
-ip_list <- as_list(ip_parsed)
-ip_list %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
-dat <- ip_list %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
-names(dat) <- str_replace(names(dat), "query.", "")
+ip_df <- as_list(ip_parsed) %>% as.data.frame(stringsAsFactors = FALSE)
+var_names <- xml_nodes(ip_parsed, xpath = "//query/child::*") %>% xml_name()
+names(ip_df) <- var_names
+ip_df
 
 # manual API call, JSON data
 url <- "http://ip-api.com/json"
@@ -104,16 +101,28 @@ ipapi_grabber("193.17.243.1")
 
 ## EXERCISES ----------
 
-# 1. familiarize yourself with the pageviews package! 
+# 1. familiarize yourself with the WikipediR package! 
+browseURL("https://cran.r-project.org/web/packages/WikipediR/vignettes/WikipediR.html")
 
 # a) what functions does it provide and what do they do?
-# b) use the package to fetch page view statistics for the articles about Donald Trump and Hillary Clinton on the English Wikipedia, and plot them against each other in a time series graph!
+# b) use the package to get content, links, and backlinks for an article you choose!
+# c) With which categories is the page tagged?
 
-# 2. familiarize yourself with the OpenWeatherMap API!
+# 2. familiarize yourself with the Openweathermap API!
 browseURL("http://openweathermap.org/current")
 
 # a) sign up for the API at the address below and obtain an API key!
 browseURL("http://openweathermap.org/api")
 # b) make a call to the API to find out the current weather conditions in Washington!
+
+# 3. familiarize yourself with the NY Times API!
+browseURL("http://developer.nytimes.com/article_search_v2.json#/README")
+
+# a) sign up for the API at the address below and obtain an API key!
+browseURL("http://developer.nytimes.com/")
+
+# b) use the rtimes package to retrieve the number of articles each that were published in the NY Times last year and that the following politicians: Nancy Pelosi, Mitch McConnell, John McCain, and Alexandra Ocasio-Cortez!
+browseURL("https://cran.r-project.org/web/packages/rtimes/vignettes/rtimes_vignette.html")
+
 
 

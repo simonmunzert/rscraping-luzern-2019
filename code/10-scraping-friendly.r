@@ -17,11 +17,11 @@ source("packages.r")
 # add User-Agent string
 url <- "http://spiegel.de/schlagzeilen"
 browseURL("http://www.whoishostingthis.com/tools/user-agent/")
-uastring <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+uastring <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36"
 session <- html_session(url, user_agent(uastring))
 
 # add header fields with rvest + httr
-session <- html_session(url, add_headers(From = "my@email.com", User-Agent = "R Scraper"))
+session <- html_session(url, add_headers(From = "my@email.com", `User-Agent` = "R Scraper"))
 headlines <- session %>% html_nodes(".schlagzeilen-headline") %>%  html_text()
 
 

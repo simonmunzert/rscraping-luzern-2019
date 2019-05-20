@@ -65,24 +65,44 @@ str_extract(buildings$`Planned architectural height`, "[[:digit:],.]+") %>% str_
 
 ## tapping APIs ----------
 
-# 1. familiarize yourself with the pageviews package! 
+# 1. familiarize yourself with the WikipediR package! 
+browseURL("https://cran.r-project.org/web/packages/WikipediR/vignettes/WikipediR.html")
 
 # a) what functions does it provide and what do they do?
-# b) use the package to fetch page view statistics for the articles about Donald Trump and Hillary Clinton on the English Wikipedia, and plot them against each other in a time series graph!
-
-library(pageviews)
-ls("package:pageviews")
-
-trump_views <- article_pageviews(project = "en.wikipedia", article = "Donald Trump", user_type = "user", start = "2016010100", end = "2017051500")
-head(trump_views)
-save(trump_views, file = "trump_pageviews.RData")
-clinton_views <- article_pageviews(project = "en.wikipedia", article = "Hillary Clinton", user_type = "user", start = "2016010100", end = "2017051500")
-
-plot(trump_views$date, trump_views$views, col = "red", type = "l")
-lines(clinton_views$date, clinton_views$views, col = "blue")
+# b) use the package to get content, links, and backlinks for an article you choose!
+# c) With which categories is the page tagged?
 
 
-# 1. familiarize yourself with the OpenWeatherMap API!
+# functionality
+ls("package:WikipediR")
+
+# get page content
+content <- page_content("de", "wikipedia", page_name = "Brandenburger_Tor", as_wikitext = TRUE)
+str(content)
+content$parse$wikitext %>% unlist %>% cat
+
+# get page links (careful: max 500 links)
+links <- page_links("de","wikipedia", page = "Brandenburger_Tor", clean_response = TRUE, limit = 500, namespaces = 0)
+lapply(links[[1]]$links, "[", 2) %>% unlist
+
+# get page backlinks (links referring to a given web resource; careful: max 500 backlinks)
+backlinks <- page_backlinks("de","wikipedia", page = "Brandenburger_Tor", clean_response = TRUE, limit = 500, namespaces = 0)
+unlist(backlinks) %>%  .[names(.) == "title"] %>% as.character
+
+# get external links
+extlinks <- page_external_links("de","wikipedia", page = "Brandenburger_Tor", clean_response = TRUE, limit = 500)
+extlinks[[1]]$extlinks
+
+# metadata on article
+metadata <- page_info("de","wikipedia", page = "Brandenburger_Tor", clean_response = TRUE) 
+metadata[[1]] %>% t() %>% as.data.frame
+
+# which categories in page
+cats <- categories_in_page("de","wikipedia", page = "Brandenburger_Tor", clean_response = TRUE)
+cats[[1]]$categories
+
+
+# 2. familiarize yourself with the OpenWeatherMap API!
 browseURL("http://openweathermap.org/current")
 
 # a) sign up for the API at the address below and obtain an API key!
@@ -99,6 +119,32 @@ weather_res <- GET(url)
 res_list <- content(weather_res, as =  "parsed")
 res_list <- content(weather_res, as =  "text")  %>% jsonlite::fromJSON(flatten = TRUE)
 res_list$list
+
+
+# 3. familiarize yourself with the NY Times API!
+browseURL("http://developer.nytimes.com/article_search_v2.json#/README")
+
+# a) sign up for the API at the address below and obtain an API key!
+browseURL("http://developer.nytimes.com/")
+
+# b) use the rtimes package to retrieve the number of articles each that were published in the NY Times last year and that the following politicians: Nancy Pelosi, Mitch McConnell, John McCain, and Alexandra Ocasio-Cortez!
+browseURL("https://cran.r-project.org/web/packages/rtimes/vignettes/rtimes_vignette.html")
+
+# use API
+library(rtimes)
+load("/Users/simonmunzert/Munzert Dropbox/Simon Munzert/rkeys.RDa")
+Sys.setenv(NYTIMES_AS_KEY = nytimes_apikey)
+
+terms <- c("John McCain", "Nancy Pelosi", "Bernie Sanders", "Al Franken", "Marco Rubio", "Paul Ryan", "Elizabeth Warren", "Mitch McConnell", "Tim Kaine", "Dianne Feinstein")
+
+
+nytimes_hits <- numeric()
+for(i in seq_along(terms)) {
+  nytimes_hits[i] <-  as_search(q = terms[i], begin_date = "20180101", end_date = '20180930')$meta$hits
+  Sys.sleep(runif(1, 1, 2))
+}
+nytimes_hits_df <- data.frame(name = terms, nytimes_hits, stringsAsFactors = FALSE)
+head(nytimes_hits_df)
 
 
 
